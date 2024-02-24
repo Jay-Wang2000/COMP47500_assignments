@@ -22,21 +22,23 @@ public class PriorityQueue<E>{
     public void offer(E element){
         if(size==stack.length)
             grow();
-        stack[size-1]=element;
+        if (size == 0)
+            stack[0] = element;
+        else
+            siftUP(size, element);
         size++;
-        siftUP(size);
     }
 
     /**
      * insert a element to the stack
      * @param k the location of the element
      */
-    public void siftUP(int k){
-        Comparable<? super E> key = (Comparable<? super E>) stack[k-1];
+    public void siftUP(int k, E x) {
+        Comparable<? super E> key = (Comparable<? super E>) x;
         while (k > 0) {
             int parent = (k - 1) >>> 1;
             Object e = stack[parent];
-            if (key.compareTo((E) e) >= 0)
+            if (key.compareTo((E) e) < 0)
                 break;
             stack[k] = e;
             k = parent;
@@ -48,8 +50,8 @@ public class PriorityQueue<E>{
      * Delete an element from the stack
      * @param k the location of the deleted element
      */
-    public void siftDown(int k){
-        Comparable<? super E> key = (Comparable<? super E>) stack[size-1];
+    public void siftDown(int k, E x) {
+        Comparable<? super E> key = (Comparable<? super E>) x;
         int half = size >>> 1;        // loop while a non-leaf
         while (k < half) {
             int child = (k << 1) + 1; // assume left child is least
@@ -58,7 +60,7 @@ public class PriorityQueue<E>{
             if (right < size &&
                     ((Comparable<? super E>) c).compareTo((E) stack[right]) > 0)
                 c = stack[child = right];
-            if (key.compareTo((E) c) <= 0)
+            if (key.compareTo((E) c) > 0)
                 break;
             stack[k] = c;
             k = child;
@@ -83,8 +85,11 @@ public class PriorityQueue<E>{
         if(size==0)
             return null;
         size--;
-        siftDown(0);
-        return (E)stack[0];
+        E ans = (E) stack[0];
+        if (size != 0)
+            siftDown(0, (E) stack[size]);
+        stack[size] = null;
+        return ans;
     }
 
     public E head(){
@@ -95,7 +100,7 @@ public class PriorityQueue<E>{
 
     @Override
     public String toString() {
-        return "PriorityQueue{" +
+        return "{" +
                 "stack=" + Arrays.toString(stack) +
                 ", size=" + size +
                 '}';

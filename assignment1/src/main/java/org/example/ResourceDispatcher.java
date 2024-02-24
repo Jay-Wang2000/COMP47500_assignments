@@ -4,7 +4,6 @@ package org.example;
  * TO mimic the atomic operation of P and V on a synchronized resource with signal in the OS
  */
 public class ResourceDispatcher {
-
     /**
      * The threads with priority waiting for the resource
      */
@@ -46,7 +45,7 @@ public class ResourceDispatcher {
         System.out.println("resource is released by a thread");
         signal++;
         if(signal<=0) {
-            System.out.println("Threads with priority of " + waitingThreads.poll() + "is dispatched with signal and got executed");
+            System.out.println("Threads with priority of " + waitingThreads.poll() + "is allocated with signal and resource");
         }
         System.out.println(this.toString());
     }
