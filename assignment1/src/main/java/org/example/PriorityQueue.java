@@ -2,6 +2,10 @@ package org.example;
 
 import java.util.Arrays;
 
+/**
+ * A customised simple priority queue implemented by stack
+ * @param <E> the type of the element
+ */
 public class PriorityQueue<E>{
     private Object[] stack;
 
@@ -23,6 +27,10 @@ public class PriorityQueue<E>{
         siftUP(size);
     }
 
+    /**
+     * insert a element to the stack
+     * @param k the location of the element
+     */
     public void siftUP(int k){
         Comparable<? super E> key = (Comparable<? super E>) stack[k-1];
         while (k > 0) {
@@ -35,7 +43,11 @@ public class PriorityQueue<E>{
         }
         stack[k] = key;
     }
-    
+
+    /**
+     * Delete an element from the stack
+     * @param k the location of the deleted element
+     */
     public void siftDown(int k){
         Comparable<? super E> key = (Comparable<? super E>) stack[size-1];
         int half = size >>> 1;        // loop while a non-leaf
@@ -53,6 +65,10 @@ public class PriorityQueue<E>{
         }
         stack[k] = key;
     }
+
+    /**
+     * if the stack meets the full capacity, then grow it
+     */
     private void grow() {
         int oldCapacity = stack.length;
         // Double size if small; else grow by 50%
@@ -75,5 +91,13 @@ public class PriorityQueue<E>{
         if(size==0)
             return null;
         return (E)stack[0];
+    }
+
+    @Override
+    public String toString() {
+        return "PriorityQueue{" +
+                "stack=" + Arrays.toString(stack) +
+                ", size=" + size +
+                '}';
     }
 }
