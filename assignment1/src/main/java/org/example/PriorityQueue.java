@@ -58,7 +58,7 @@ public class PriorityQueue<E>{
             Object c = stack[child];
             int right = child + 1;
             if (right < size &&
-                    ((Comparable<? super E>) c).compareTo((E) stack[right]) > 0)
+                    ((Comparable<? super E>) c).compareTo((E) stack[right]) <= 0)
                 c = stack[child = right];
             if (key.compareTo((E) c) > 0)
                 break;
@@ -84,10 +84,10 @@ public class PriorityQueue<E>{
     public E poll(){
         if(size==0)
             return null;
-        size--;
         E ans = (E) stack[0];
         if (size != 0)
-            siftDown(0, (E) stack[size]);
+            siftDown(0, (E) stack[size - 1]);
+        size--;
         stack[size] = null;
         return ans;
     }

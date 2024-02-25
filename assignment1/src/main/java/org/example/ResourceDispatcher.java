@@ -7,7 +7,7 @@ public class ResourceDispatcher {
     /**
      * The threads with priority waiting for the resource
      */
-    private PriorityQueue<Integer> waitingThreads;
+    private final PriorityQueue<Integer> waitingThreads;
     /**
      * Signal: indicate the availability of a resource
      *
@@ -34,7 +34,7 @@ public class ResourceDispatcher {
             System.out.println("Threads with priority of " + priority + "is put into the waiting queue");
         }else
             System.out.println("Threads with priority of " + priority +"is executed");
-        System.out.println(this.toString());
+        System.out.println(this);
     }
 
     /**
@@ -45,14 +45,17 @@ public class ResourceDispatcher {
         System.out.println("resource is released by a thread");
         signal++;
         if(signal<=0) {
-            System.out.println("Threads with priority of " + waitingThreads.poll() + "is allocated with signal and resource");
+            System.out.println("Threads with priority of " + waitingThreads.poll() + " is allocated with signal and resource");
         }
-        System.out.println(this.toString());
+        System.out.println(this);
     }
 
+    public Boolean isWaiting() {
+        return waitingThreads.size() != 0;
+    }
     @Override
     public String toString() {
         return "Current signal num: "+signal+"\n"+
-                "Wating queue:"+this.waitingThreads.toString();
+                "Wating queue:"+ this.waitingThreads;
     }
 }
