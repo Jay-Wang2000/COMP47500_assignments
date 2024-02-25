@@ -14,6 +14,14 @@ public class TestDataGenerator {
         return array;
     }
 
+    public static Thread[] generateRandomThreads(int size, int min, int max) {
+        Thread[] array = new Thread[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = new Thread("Thread" + i, RANDOM.nextInt(max - min + 1) + min);
+        }
+        return array;
+    }
+
     // 生成指定大小的递增整数数组
     public static Integer[] generateSortedArray(int size) {
         Integer[] array = new Integer[size];

@@ -67,7 +67,7 @@ public class Main {
     private static void testResourceDispatcherPerformance(int size) {
         ResourceDispatcher dispatcher = new ResourceDispatcher(2); // 初始信号为2
         // 将上面生成的大规模数据中的一部分作为线程的优先级进行测试
-        Integer[] largeData = TestDataGenerator.generateRandomArray(size, 1, 100); // 生成随机数据
+        Thread[] largeData = TestDataGenerator.generateRandomThreads(size, 1, 100); // 生成随机数据
         int p = 0;
         while (p < largeData.length - 1) {
             dispatcher.P(largeData[p++]);

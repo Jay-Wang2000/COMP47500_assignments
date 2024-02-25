@@ -7,7 +7,7 @@ public class ResourceDispatcher {
     /**
      * The threads with priority waiting for the resource
      */
-    private final PriorityQueue<Integer> waitingThreads;
+    private final PriorityQueue<Thread> waitingThreads;
     /**
      * Signal: indicate the availability of a resource
      *
@@ -27,13 +27,13 @@ public class ResourceDispatcher {
      * @Otherwise the thread gets the resource
      * @param priority the thread has priority represented by an integer
      */
-    public void P(int priority) {
+    public void P(Thread thread) {
         signal--;
         if (signal < 0) {
-            waitingThreads.offer(priority);
-            System.out.println("Threads with priority of " + priority + "is put into the waiting queue");
+            waitingThreads.offer(thread);
+            System.out.println(thread + "is put into the waiting queue");
         }else
-            System.out.println("Threads with priority of " + priority +"is executed");
+            System.out.println(thread + "is executed");
         System.out.println(this);
     }
 
@@ -45,7 +45,7 @@ public class ResourceDispatcher {
         System.out.println("resource is released by a thread");
         signal++;
         if(signal<=0) {
-            System.out.println("Threads with priority of " + waitingThreads.poll() + " is allocated with signal and resource");
+            System.out.println(waitingThreads.poll() + " is allocated with signal and resource");
         }
         System.out.println(this);
     }
