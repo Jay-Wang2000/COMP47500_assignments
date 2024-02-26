@@ -49,25 +49,25 @@ public class Main {
         System.out.println("+-------------------------------------------------------------+");
     }
 
-    // 测试PriorityQueue的性能
+    // Test the performance of PriorityQueue
     private static void testPriorityQueuePerformance(int size) {
         PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
-        // 将上面生成的大规模数据添加到优先级队列中
-        Integer[] largeData = TestDataGenerator.generateRandomArray(size, 1, 1000); // 生成随机数据
+        // Add the large-scale data generated above to the priority queue
+        Integer[] largeData = TestDataGenerator.generateRandomArray(size, 1, 1000); // Generate random data
         for (Integer data : largeData) {
             priorityQueue.offer(data);
         }
-        // 不断从优先级队列中取出元素直到队列为空
+        // Continuously remove elements from the priority queue until the queue is empty
         while (priorityQueue.size() > 0) {
             priorityQueue.poll();
         }
     }
 
-    // 测试ResourceDispatcher的性能
+    // Test the performance of ResourceDispatcher
     private static void testResourceDispatcherPerformance(int size) {
-        ResourceDispatcher dispatcher = new ResourceDispatcher(2); // 初始信号为2
-        // 将上面生成的大规模数据中的一部分作为线程的优先级进行测试
-        Thread[] largeData = TestDataGenerator.generateRandomThreads(size, 1, 100); // 生成随机数据
+        ResourceDispatcher dispatcher = new ResourceDispatcher(2); // The initial signal is 2
+        // Test a portion of the large-scale data generated above as a thread's priority
+        Thread[] largeData = TestDataGenerator.generateRandomThreads(size, 1, 100); // Generate random data
         int p = 0;
         while (p < largeData.length - 1) {
             dispatcher.P(largeData[p++]);
