@@ -5,7 +5,7 @@ import java.util.Random;
 public class TestDataGenerator {
     private static final Random RANDOM = new Random();
 
-    // 生成指定范围内的随机整数数组
+    // Generate an array of random integers within a specified range
     public static Integer[] generateRandomArray(int size, int min, int max) {
         Integer[] array = new Integer[size];
         for (int i = 0; i < size; i++) {
@@ -22,7 +22,7 @@ public class TestDataGenerator {
         return array;
     }
 
-    // 生成指定大小的递增整数数组
+    // Generates an increasing array of integers of a specified size
     public static Integer[] generateSortedArray(int size) {
         Integer[] array = new Integer[size];
         for (int i = 0; i < size; i++) {
@@ -31,7 +31,7 @@ public class TestDataGenerator {
         return array;
     }
 
-    // 生成指定大小的递减整数数组
+    // Generates a descending array of integers of a specified size
     public static Integer[] generateReverseSortedArray(int size) {
         Integer[] array = new Integer[size];
         for (int i = 0; i < size; i++) {
