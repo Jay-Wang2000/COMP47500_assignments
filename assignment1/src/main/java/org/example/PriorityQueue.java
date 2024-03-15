@@ -3,51 +3,51 @@ package org.example;
 import java.util.Arrays;
 
 /**
- * A customised simple priority queue implemented by stack
+ * A customised simple priority queue implemented by queue
  * @param <E> the type of the element
  */
 public class PriorityQueue<E>{
-    private Object[] stack;
+    private Object[] queue;
 
     private int size = 0;
 
     private static final int DEFAULT_CAPACITY=8;
 
     public PriorityQueue(){
-        this.stack = new Object[DEFAULT_CAPACITY];
+        this.queue = new Object[DEFAULT_CAPACITY];
     }
 
     public int size(){return this.size;}
 
     public void offer(E element){
-        if(size==stack.length)
+        if(size==queue.length)
             grow();
         if (size == 0)
-            stack[0] = element;
+            queue[0] = element;
         else
             siftUP(size, element);
         size++;
     }
 
     /**
-     * insert a element to the stack
+     * insert a element to the queue
      * @param k the location of the element
      */
     public void siftUP(int k, E x) {
         Comparable<? super E> key = (Comparable<? super E>) x;
         while (k > 0) {
             int parent = (k - 1) >>> 1;
-            Object e = stack[parent];
+            Object e = queue[parent];
             if (key.compareTo((E) e) < 0)
                 break;
-            stack[k] = e;
+            queue[k] = e;
             k = parent;
         }
-        stack[k] = key;
+        queue[k] = key;
     }
 
     /**
-     * Delete an element from the stack
+     * Delete an element from the queue
      * @param k the location of the deleted element
      */
     public void siftDown(int k, E x) {
@@ -55,53 +55,53 @@ public class PriorityQueue<E>{
         int half = size >>> 1;        // loop while a non-leaf
         while (k < half) {
             int child = (k << 1) + 1; // assume left child is least
-            Object c = stack[child];
+            Object c = queue[child];
             int right = child + 1;
             if (right < size &&
-                    ((Comparable<? super E>) c).compareTo((E) stack[right]) <= 0)
-                c = stack[child = right];
+                    ((Comparable<? super E>) c).compareTo((E) queue[right]) <= 0)
+                c = queue[child = right];
             if (key.compareTo((E) c) > 0)
                 break;
-            stack[k] = c;
+            queue[k] = c;
             k = child;
         }
-        stack[k] = key;
+        queue[k] = key;
     }
 
     /**
-     * if the stack meets the full capacity, then grow it
+     * if the queue meets the full capacity, then grow it
      */
     private void grow() {
-        int oldCapacity = stack.length;
+        int oldCapacity = queue.length;
         // Double size if small; else grow by 50%
         int newCapacity = oldCapacity + ((oldCapacity < 64) ?
                 (oldCapacity + 2) :
                 (oldCapacity >> 1));
         // overflow-conscious code
-        stack = Arrays.copyOf(stack, newCapacity);
+        queue = Arrays.copyOf(queue, newCapacity);
     }
 
     public E poll(){
         if(size==0)
             return null;
-        E ans = (E) stack[0];
+        E ans = (E) queue[0];
         if (size != 0)
-            siftDown(0, (E) stack[size - 1]);
+            siftDown(0, (E) queue[size - 1]);
         size--;
-        stack[size] = null;
+        queue[size] = null;
         return ans;
     }
 
     public E head(){
         if(size==0)
             return null;
-        return (E)stack[0];
+        return (E)queue[0];
     }
 
     @Override
     public String toString() {
         return "{" +
-                "stack=" + Arrays.toString(stack) +
+                "queue=" + Arrays.toString(queue) +
                 ", size=" + size +
                 '}';
     }
