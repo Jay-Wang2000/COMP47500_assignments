@@ -1,19 +1,8 @@
 package org.example;
 
-import sun.reflect.generics.tree.Tree;
-
 public class BinarySearchTree<T> {
     private TreeNode<T> root;
     private int depth;
-
-    public TreeNode<T> getRoot() {
-        return this.root;
-    }
-
-    public BinarySearchTree(T firstValue) {
-        root = new TreeNode<>(firstValue);
-        depth = 0;
-    }
 
     public BinarySearchTree() {
         root = null;
