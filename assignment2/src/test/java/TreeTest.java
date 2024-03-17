@@ -1,4 +1,6 @@
 import org.example.AVL;
+import org.example.AVL2;
+import org.example.AvlNode2;
 import org.example.BinarySearchTree;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,5 +32,15 @@ public class TreeTest {
         avl.remove(2);
         avl.remove(6);
         System.out.println(avl);
+    }
+
+    @Test
+    public void AVL2Test() {
+        AVL2<Integer> avl2 = new AVL2<>();
+        AvlNode2<Integer> avlNode2 = avl2.insert(new Integer[]{1, 2, 3, 4, 6, 5, 7}, null);
+        System.out.println(avl2.levelOrderTraverse(avlNode2));
+        avl2.remove(2, avlNode2);
+        avl2.remove(6, avlNode2);
+        System.out.println(avl2.levelOrderTraverse(avlNode2));
     }
 }

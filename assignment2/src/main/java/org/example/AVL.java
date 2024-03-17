@@ -68,45 +68,45 @@ public class AVL<T> {
         }
     }
 
-//    public Boolean remove(T value) {
-//        return remove(this.root, value);
-//    }
-//
-//    //a node's former node is the node with the largest value in the left child tree.
-//    //a node's following node is the node with the smallest value in the right child tree.
-//    private Boolean remove(AVLTreeNode<T> root, T value) {
-//        root = search(root, value);
-//        if (root == null)
-//            return false;
-//        AVLTreeNode<T> parent = root.parent;
-//        //if the node doesn't is a leaf
-//        if (root.leftChild == null && root.rightChild == null)
-//            if (parent.leftChild == root)
-//                parent.leftChild = null;
-//            else
-//                parent.rightChild = null;
-//
-//        AVLTreeNode<T> p = root;
-//        //in java an object cannot be deleted directly
-//        if (root.leftChild != null) {
-//            p = p.leftChild;
-//            while (p.rightChild != null) {
-//                p = p.rightChild;
-//            }
-//            root.value = p.value;
-//            remove(root.leftChild, p.value);
-//        } else if (root.rightChild != null) {
-//            //if the node doesn't have a former node
-//            p = p.rightChild;
-//            while (p.leftChild != null) {
-//                p = p.leftChild;
-//            }
-//            root.value = p.value;
-//            remove(root.rightChild, p.value);
-//        }
-//
-//        return true;
-//    }
+    public Boolean remove(T value) {
+        return remove(this.root, value);
+    }
+
+    //a node's former node is the node with the largest value in the left child tree.
+    //a node's following node is the node with the smallest value in the right child tree.
+    private Boolean remove(AVLTreeNode<T> root, T value) {
+        root = search(root, value);
+        if (root == null)
+            return false;
+        AVLTreeNode<T> parent = root.parent;
+        //if the node doesn't is a leaf
+        if (root.leftChild == null && root.rightChild == null)
+            if (parent.leftChild == root)
+                parent.leftChild = null;
+            else
+                parent.rightChild = null;
+
+        AVLTreeNode<T> p = root;
+        //in java an object cannot be deleted directly
+        if (root.leftChild != null) {
+            p = p.leftChild;
+            while (p.rightChild != null) {
+                p = p.rightChild;
+            }
+            root.value = p.value;
+            remove(root.leftChild, p.value);
+        } else if (root.rightChild != null) {
+            //if the node doesn't have a former node
+            p = p.rightChild;
+            while (p.leftChild != null) {
+                p = p.leftChild;
+            }
+            root.value = p.value;
+            remove(root.rightChild, p.value);
+        }
+
+        return true;
+    }
 
     public AVLTreeNode<T> search(T value) {
         return search(root, value);
