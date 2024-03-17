@@ -23,7 +23,6 @@ public class AVL<T> {
             root = new AVLTreeNode<>(value);
             return;
         }
-
         Comparable<? super T> k = (Comparable<? super T>) value;
         add(this.root, value, k.compareTo(root.value) < 0 ? -1 : 1);
     }
@@ -33,11 +32,13 @@ public class AVL<T> {
         if (direction < 0 && root.leftChild == null) {
             newNode.parent = root;
             root.leftChild = newNode;
+            newNode.height = 1;
             return;
         }
         if (direction > 0 && root.rightChild == null) {
             root.rightChild = newNode;
             newNode.parent = root;
+            newNode.height = 1;
             return;
         }
         Comparable<? super T> k = (Comparable<? super T>) value;
@@ -57,7 +58,7 @@ public class AVL<T> {
             add(root.rightChild, value, cmp);
             updateHeight(root);
             if (getBalanceFactor(root) == -2) {
-                if (getBalanceFactor(root.leftChild.rightChild) == -1)
+                if (getBalanceFactor(root.rightChild) == -1)
                     LRotation(root);
                 else if (getBalanceFactor(root.rightChild) == 1) {
                     RRotation(root.rightChild);
@@ -67,45 +68,45 @@ public class AVL<T> {
         }
     }
 
-    public Boolean remove(T value) {
-        return remove(this.root, value);
-    }
-
-    //a node's former node is the node with the largest value in the left child tree.
-    //a node's following node is the node with the smallest value in the right child tree.
-    private Boolean remove(AVLTreeNode<T> root, T value) {
-        root = search(root, value);
-        if (root == null)
-            return false;
-        AVLTreeNode<T> parent = root.parent;
-        //if the node doesn't is a leaf
-        if (root.leftChild == null && root.rightChild == null)
-            if (parent.leftChild == root)
-                parent.leftChild = null;
-            else
-                parent.rightChild = null;
-
-        AVLTreeNode<T> p = root;
-        //in java an object cannot be deleted directly
-        if (root.leftChild != null) {
-            p = p.leftChild;
-            while (p.rightChild != null) {
-                p = p.rightChild;
-            }
-            root.value = p.value;
-            remove(root.leftChild, p.value);
-        } else if (root.rightChild != null) {
-            //if the node doesn't have a former node
-            p = p.rightChild;
-            while (p.leftChild != null) {
-                p = p.leftChild;
-            }
-            root.value = p.value;
-            remove(root.rightChild, p.value);
-        }
-
-        return true;
-    }
+//    public Boolean remove(T value) {
+//        return remove(this.root, value);
+//    }
+//
+//    //a node's former node is the node with the largest value in the left child tree.
+//    //a node's following node is the node with the smallest value in the right child tree.
+//    private Boolean remove(AVLTreeNode<T> root, T value) {
+//        root = search(root, value);
+//        if (root == null)
+//            return false;
+//        AVLTreeNode<T> parent = root.parent;
+//        //if the node doesn't is a leaf
+//        if (root.leftChild == null && root.rightChild == null)
+//            if (parent.leftChild == root)
+//                parent.leftChild = null;
+//            else
+//                parent.rightChild = null;
+//
+//        AVLTreeNode<T> p = root;
+//        //in java an object cannot be deleted directly
+//        if (root.leftChild != null) {
+//            p = p.leftChild;
+//            while (p.rightChild != null) {
+//                p = p.rightChild;
+//            }
+//            root.value = p.value;
+//            remove(root.leftChild, p.value);
+//        } else if (root.rightChild != null) {
+//            //if the node doesn't have a former node
+//            p = p.rightChild;
+//            while (p.leftChild != null) {
+//                p = p.leftChild;
+//            }
+//            root.value = p.value;
+//            remove(root.rightChild, p.value);
+//        }
+//
+//        return true;
+//    }
 
     public AVLTreeNode<T> search(T value) {
         return search(root, value);
@@ -142,9 +143,15 @@ public class AVL<T> {
     private void RRotation(AVLTreeNode<T> root) {
         AVLTreeNode<T> temp = root.leftChild;
         root.leftChild = temp.rightChild;
+        if (temp.rightChild != null)
+            temp.rightChild.parent = root;
         temp.rightChild = root;
+        root.parent = temp;
         updateHeight(root);
         updateHeight(temp);
+        if (root == this.root)
+            this.root = temp;
+        else
         if (root.parent.leftChild == root)
             root.parent.leftChild = temp;
         else
@@ -154,10 +161,15 @@ public class AVL<T> {
     private void LRotation(AVLTreeNode<T> root) {
         AVLTreeNode<T> temp = root.rightChild;
         root.rightChild = temp.leftChild;
+        if (temp.leftChild != null)
+            temp.leftChild.parent = root;
         temp.leftChild = root;
+        root.parent = temp;
         updateHeight(root);
         updateHeight(temp);
-        if (root.parent.leftChild == root)
+        if (root == this.root)
+            this.root = temp;
+        else if (root.parent.leftChild == root)
             root.parent.leftChild = temp;
         else
             root.parent.rightChild = temp;
@@ -178,7 +190,7 @@ public class AVL<T> {
         return outcome;
     }
     private int getBalanceFactor(AVLTreeNode<T> root) {
-        return root.height;
+        return getHeight(root.leftChild) - getHeight(root.rightChild);
     }
 
     @Override

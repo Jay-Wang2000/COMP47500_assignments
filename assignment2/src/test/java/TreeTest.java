@@ -25,9 +25,10 @@ public class TreeTest {
     @Test
     public void AVLTest() {
         AVL<Integer> avl = new AVL<>();
-        avl.add(new Integer[]{1, 2, 3, 4, 5, 6});
+        avl.add(new Integer[]{1, 2, 3, 4, 6, 5, 7});
         System.out.println(avl);
         avl.remove(2);
+        avl.remove(6);
         System.out.println(avl);
     }
 }
