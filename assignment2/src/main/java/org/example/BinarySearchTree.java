@@ -77,42 +77,51 @@ public class BinarySearchTree<T> {
     public Boolean remove(T value) {
         return remove(this.root, value);
     }
-    //a node's former node is the node with the largest value in the left child tree.
-    //a node's following node is the node with the smallest value in the right child tree.
-    private Boolean remove(TreeNode<T> root, T value) {
-        root = search(root, value);
-        if (root == null)
-            return false;
-        TreeNode<T> parent = root.parent;
-        //if the node doesn't is a leaf
-        if (root.leftChild == null && root.rightChild == null)
-            if (parent.leftChild == root)
-                parent.leftChild = null;
-            else
-                parent.rightChild = null;
 
-        TreeNode<T> p = root;
-        //in java an object cannot be deleted directly
-        if (root.leftChild != null) {
-            p = p.leftChild;
-            while (p.rightChild != null) {
-                p = p.rightChild;
+    private Boolean remove(TreeNode<T> root, T value) {
+        TreeNode<T> nodeToRemove = search(root, value);
+        if (nodeToRemove == null)
+            return false;
+
+        TreeNode<T> parent = nodeToRemove.parent;
+        //if the node doesn't is a leaf
+        if (nodeToRemove.leftChild == null && nodeToRemove.rightChild == null) {
+            if (parent != null) {
+                if (parent.leftChild == nodeToRemove)
+                    parent.leftChild = null;
+                else
+                    parent.rightChild = null;
+            } else {
+                root = null;
             }
-            root.value = p.value;
-            remove(root.leftChild, p.value);
-        } else if (root.rightChild != null) {
-            //if the node doesn't have a former node
-            p = p.rightChild;
-            while (p.leftChild != null) {
-                p = p.leftChild;
+        } else if (nodeToRemove.leftChild != null && nodeToRemove.rightChild != null) {
+            // if the node has two children
+            TreeNode<T> successor = minimum(nodeToRemove.rightChild);
+            nodeToRemove.value = successor.value;
+            remove(successor, successor.value);
+        } else {
+            // if the node has only one child
+            TreeNode<T> child = (nodeToRemove.leftChild != null) ? nodeToRemove.leftChild : nodeToRemove.rightChild;
+            if (parent != null) {
+                if (parent.leftChild == nodeToRemove)
+                    parent.leftChild = child;
+                else
+                    parent.rightChild = child;
+            } else {
+                root = child;
             }
-            root.value = p.value;
-            remove(root.rightChild, p.value);
+            if (child != null)
+                child.parent = parent;
         }
 
         return true;
     }
 
+    private TreeNode<T> minimum(TreeNode<T> node) {
+        while (node.leftChild != null)
+            node = node.leftChild;
+        return node;
+    }
     public int getDepth() {
         return depth;
     }
