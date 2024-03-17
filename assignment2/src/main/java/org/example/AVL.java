@@ -1,6 +1,11 @@
 package org.example;
 
-public class AVL<T> extends BinarySearchTree<T> {
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class AVL<T> {
 
     AVLTreeNode<T> root;
 
@@ -8,19 +13,37 @@ public class AVL<T> extends BinarySearchTree<T> {
         root = null;
     }
 
-    @Override
-    public void add(T value) {
-        add(root, new AVLTreeNode<>(value));
+    public void add(T[] values) {
+        for (T value : values)
+            add(value);
     }
 
-    private void add(AVLTreeNode<T> root, AVLTreeNode<T> newNode) {
+    public void add(T value) {
         if (root == null) {
-            root = newNode;
+            root = new AVLTreeNode<>(value);
             return;
         }
-        Comparable<? super T> k = (Comparable<? super T>) newNode;
-        if (k.compareTo(root.value) < 0) {
-            add(root.leftChild, newNode);
+
+        Comparable<? super T> k = (Comparable<? super T>) value;
+        add(this.root, value, k.compareTo(root.value) < 0 ? -1 : 1);
+    }
+
+    private void add(AVLTreeNode<T> root, T value, int direction) {
+        AVLTreeNode<T> newNode = new AVLTreeNode<>(value);
+        if (direction < 0 && root.leftChild == null) {
+            newNode.parent = root;
+            root.leftChild = newNode;
+            return;
+        }
+        if (direction > 0 && root.rightChild == null) {
+            root.rightChild = newNode;
+            newNode.parent = root;
+            return;
+        }
+        Comparable<? super T> k = (Comparable<? super T>) value;
+        int cmp = k.compareTo(root.value);
+        if (cmp < 0) {
+            add(root.leftChild, value, cmp);
             updateHeight(root);
             if (getBalanceFactor(root) == 2) {
                 if (getBalanceFactor(root.leftChild) == 1)
@@ -31,7 +54,7 @@ public class AVL<T> extends BinarySearchTree<T> {
                 }
             }
         } else {
-            add(root.rightChild, newNode);
+            add(root.rightChild, value, cmp);
             updateHeight(root);
             if (getBalanceFactor(root) == -2) {
                 if (getBalanceFactor(root.leftChild.rightChild) == -1)
@@ -44,6 +67,66 @@ public class AVL<T> extends BinarySearchTree<T> {
         }
     }
 
+    public Boolean remove(T value) {
+        return remove(this.root, value);
+    }
+
+    //a node's former node is the node with the largest value in the left child tree.
+    //a node's following node is the node with the smallest value in the right child tree.
+    private Boolean remove(AVLTreeNode<T> root, T value) {
+        root = search(root, value);
+        if (root == null)
+            return false;
+        AVLTreeNode<T> parent = root.parent;
+        //if the node doesn't is a leaf
+        if (root.leftChild == null && root.rightChild == null)
+            if (parent.leftChild == root)
+                parent.leftChild = null;
+            else
+                parent.rightChild = null;
+
+        AVLTreeNode<T> p = root;
+        //in java an object cannot be deleted directly
+        if (root.leftChild != null) {
+            p = p.leftChild;
+            while (p.rightChild != null) {
+                p = p.rightChild;
+            }
+            root.value = p.value;
+            remove(root.leftChild, p.value);
+        } else if (root.rightChild != null) {
+            //if the node doesn't have a former node
+            p = p.rightChild;
+            while (p.leftChild != null) {
+                p = p.leftChild;
+            }
+            root.value = p.value;
+            remove(root.rightChild, p.value);
+        }
+
+        return true;
+    }
+
+    public AVLTreeNode<T> search(T value) {
+        return search(root, value);
+    }
+
+    private AVLTreeNode<T> search(AVLTreeNode<T> root, T value) {
+        if (root == null)
+            return null;
+        Comparable<? super T> v = (Comparable<? super T>) value;
+        AVLTreeNode<T> p = root;
+        while (p != null) {
+            int cmp = v.compareTo(p.value);
+            if (cmp < 0)
+                p = p.leftChild;
+            else if (cmp > 0)
+                p = p.rightChild;
+            else
+                return p;
+        }
+        return null;
+    }
 
     private int getHeight(AVLTreeNode avlTreeNode) {
         if (avlTreeNode == null)
@@ -80,8 +163,26 @@ public class AVL<T> extends BinarySearchTree<T> {
             root.parent.rightChild = temp;
     }
 
+    public List<T> levelOrderTraverse() {
+        Queue<AVLTreeNode<T>> queue = new LinkedList<>();
+        List<T> outcome = new ArrayList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            AVLTreeNode<T> head = queue.peek();
+            outcome.add(queue.poll().value);
+            if (head.leftChild != null)
+                queue.offer(head.leftChild);
+            if (head.rightChild != null)
+                queue.offer(head.rightChild);
+        }
+        return outcome;
+    }
     private int getBalanceFactor(AVLTreeNode<T> root) {
         return root.height;
     }
 
+    @Override
+    public String toString() {
+        return levelOrderTraverse().toString();
+    }
 }

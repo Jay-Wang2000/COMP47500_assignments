@@ -10,7 +10,7 @@ public class AVLTreeNode<T> {
     int height;
 
     public AVLTreeNode(T value) {
-        value = value;
+        this.value = value;
         leftChild = null;
         rightChild = null;
         parent = null;

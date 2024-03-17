@@ -29,7 +29,7 @@ public class BinarySearchTree<T> {
         int step = 0; //calculate the depth of the newNode
         Comparable<? super T> v = (Comparable<? super T>) newNode.value;
         TreeNode<T> p = root;
-        TreeNode<T> parent = p;
+        TreeNode<T> parent = null;
         int cmp = 0;
         while (p != null) {
             parent = p;
@@ -53,6 +53,10 @@ public class BinarySearchTree<T> {
     }
 
     public TreeNode<T> search(T value) {
+        return search(root, value);
+    }
+
+    private TreeNode<T> search(TreeNode<T> root, T value) {
         if (root == null)
             return null;
         Comparable<? super T> v = (Comparable<? super T>) value;
@@ -70,43 +74,42 @@ public class BinarySearchTree<T> {
     }
 
 
+    public Boolean remove(T value) {
+        return remove(this.root, value);
+    }
     //a node's former node is the node with the largest value in the left child tree.
     //a node's following node is the node with the smallest value in the right child tree.
-    public Boolean remove(T value) {
-        TreeNode<T> treeNode = search(value);
-        if (treeNode == null)
+    private Boolean remove(TreeNode<T> root, T value) {
+        root = search(root, value);
+        if (root == null)
             return false;
-
-
+        TreeNode<T> parent = root.parent;
         //if the node doesn't is a leaf
-        if (treeNode.rightChild == null && treeNode.leftChild == null) {
-            TreeNode<T> parent = treeNode.parent;
-            if (parent.leftChild == treeNode)
+        if (root.leftChild == null && root.rightChild == null)
+            if (parent.leftChild == root)
                 parent.leftChild = null;
             else
                 parent.rightChild = null;
-            return true;
-        }
 
-        TreeNode<T> p = treeNode;
+        TreeNode<T> p = root;
         //in java an object cannot be deleted directly
-        if (treeNode.leftChild != null) {
+        if (root.leftChild != null) {
             p = p.leftChild;
             while (p.rightChild != null) {
                 p = p.rightChild;
             }
-            treeNode.value = p.value;
-            p.parent.rightChild = null;
-        } else {
+            root.value = p.value;
+            remove(root.leftChild, p.value);
+        } else if (root.rightChild != null) {
             //if the node doesn't have a former node
             p = p.rightChild;
             while (p.leftChild != null) {
-                ;
                 p = p.leftChild;
             }
-            treeNode.value = p.value;
-            p.parent.leftChild = null;
+            root.value = p.value;
+            remove(root.rightChild, p.value);
         }
+
         return true;
     }
 
@@ -117,14 +120,14 @@ public class BinarySearchTree<T> {
     public List<T> levelOrderTraverse() {
         Queue<TreeNode<T>> queue = new LinkedList<>();
         List<T> outcome = new ArrayList<>();
-        queue.offer(root);
+        queue.offer(this.root);
         while (!queue.isEmpty()) {
             TreeNode<T> head = queue.peek();
             outcome.add(queue.poll().value);
-            if (head.rightChild != null)
-                queue.offer(head.rightChild);
             if (head.leftChild != null)
                 queue.offer(head.leftChild);
+            if (head.rightChild != null)
+                queue.offer(head.rightChild);
         }
         return outcome;
     }

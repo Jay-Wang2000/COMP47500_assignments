@@ -12,12 +12,12 @@ public class TreeTest {
     @Test
     public void BSTTest() {
         BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
-        binarySearchTree.add(new Integer[]{2, 1, 1, 3, 5});
+        binarySearchTree.add(new Integer[]{1, 2, 3, 5, 6, 7});
         System.out.println(binarySearchTree);
         System.out.println("Search node 1: " + binarySearchTree.search(1));
         if (!binarySearchTree.remove(4))
             System.out.println("4 doesn't exist");
-        if (binarySearchTree.remove(1))
+        if (binarySearchTree.remove(3))
             System.out.println("remove successfully");
         System.out.println(binarySearchTree);
     }
@@ -25,6 +25,9 @@ public class TreeTest {
     @Test
     public void AVLTest() {
         AVL<Integer> avl = new AVL<>();
-
+        avl.add(new Integer[]{1, 2, 3, 4, 5, 6});
+        System.out.println(avl);
+        avl.remove(2);
+        System.out.println(avl);
     }
 }
