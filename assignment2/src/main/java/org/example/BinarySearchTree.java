@@ -1,5 +1,10 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class BinarySearchTree<T> {
     private TreeNode<T> root;
     private int depth;
@@ -36,6 +41,7 @@ public class BinarySearchTree<T> {
             parent.leftChild = newNode;
         else
             parent.rightChild = newNode;
+        newNode.parent = parent;
         if (depth < step)
             depth = step;
     }
@@ -60,41 +66,65 @@ public class BinarySearchTree<T> {
 
     //a node's former node is the node with the largest value in the left child tree.
     //a node's following node is the node with the smallest value in the right child tree.
-    public Boolean remove(TreeNode<T> treeNode) {
+    public Boolean remove(T value) {
+        TreeNode<T> treeNode = search(value);
         if (treeNode == null)
             return false;
 
+
         //if the node doesn't is a leaf
         if (treeNode.rightChild == null && treeNode.leftChild == null) {
-            treeNode.value = null;
+            TreeNode<T> parent = treeNode.parent;
+            if (parent.leftChild == treeNode)
+                parent.leftChild = null;
+            else
+                parent.rightChild = null;
             return true;
         }
 
         TreeNode<T> p = treeNode;
-        TreeNode<T> parent = p;
         //in java an object cannot be deleted directly
         if (treeNode.leftChild != null) {
             p = p.leftChild;
             while (p.rightChild != null) {
-                parent = p;
                 p = p.rightChild;
             }
             treeNode.value = p.value;
-            parent.rightChild = null;
+            p.parent.rightChild = null;
         } else {
             //if the node doesn't have a former node
             p = p.rightChild;
             while (p.leftChild != null) {
-                parent = p;
+                ;
                 p = p.leftChild;
             }
             treeNode.value = p.value;
-            p.leftChild = null;
+            p.parent.leftChild = null;
         }
         return true;
     }
 
     public int getDepth() {
         return depth;
+    }
+
+    public List<T> levelOrderTraverse() {
+        Queue<TreeNode<T>> queue = new LinkedList<>();
+        List<T> outcome = new ArrayList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode<T> head = queue.peek();
+            outcome.add(queue.poll().value);
+            if (head.rightChild != null)
+                queue.offer(head.rightChild);
+            if (head.leftChild != null)
+                queue.offer(head.leftChild);
+        }
+        return outcome;
+    }
+
+    @Override
+    public String toString() {
+        return levelOrderTraverse().toString();
     }
 }

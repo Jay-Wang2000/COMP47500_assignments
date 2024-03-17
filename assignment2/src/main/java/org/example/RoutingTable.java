@@ -14,8 +14,8 @@ public class RoutingTable {
         binarySearchTree.add(new TreeNode<>(routingInfo));
     }
 
-    public void remove(RoutingInfo routingInfo) {
-        binarySearchTree.remove(new TreeNode<>(routingInfo));
+    public boolean remove(RoutingInfo routingInfo) {
+        return binarySearchTree.remove(routingInfo);
     }
 
     public void search(String routingTarget) {
