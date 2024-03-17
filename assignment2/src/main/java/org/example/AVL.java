@@ -9,8 +9,8 @@ public class AVL<T> extends BinarySearchTree<T> {
     }
 
     @Override
-    public void add(TreeNode<T> newNode) {
-        add(root, new AVLTreeNode<>(newNode));
+    public void add(T value) {
+        add(root, new AVLTreeNode<>(value));
     }
 
     private void add(AVLTreeNode<T> root, AVLTreeNode<T> newNode) {

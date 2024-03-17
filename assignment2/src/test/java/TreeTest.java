@@ -1,6 +1,5 @@
 import org.example.AVL;
 import org.example.BinarySearchTree;
-import org.example.TreeNode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,10 +12,7 @@ public class TreeTest {
     @Test
     public void BSTTest() {
         BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
-        binarySearchTree.add(new TreeNode<>(2));
-        binarySearchTree.add(new TreeNode<>(1));
-        binarySearchTree.add(new TreeNode<>(1));
-        binarySearchTree.add(new TreeNode<>(3));
+        binarySearchTree.add(new Integer[]{2, 1, 1, 3, 5});
         System.out.println(binarySearchTree);
         System.out.println("Search node 1: " + binarySearchTree.search(1));
         if (!binarySearchTree.remove(4))

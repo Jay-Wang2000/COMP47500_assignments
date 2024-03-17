@@ -11,7 +11,7 @@ public class RoutingTable {
     }
 
     public void addRoute(RoutingInfo routingInfo) {
-        binarySearchTree.add(new TreeNode<>(routingInfo));
+        binarySearchTree.add(routingInfo);
     }
 
     public boolean remove(RoutingInfo routingInfo) {

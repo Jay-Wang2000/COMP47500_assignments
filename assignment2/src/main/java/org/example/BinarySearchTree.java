@@ -14,7 +14,13 @@ public class BinarySearchTree<T> {
         depth = 0;
     }
 
-    public void add(TreeNode<T> newNode) {
+    public void add(T[] values) {
+        for (T value : values)
+            add(value);
+    }
+
+    public void add(T value) {
+        TreeNode<T> newNode = new TreeNode<>(value);
         if (root == null) {
             root = newNode;
             return;
