@@ -37,5 +37,12 @@ public class RoutingTable {
                     avl.search(new RoutingInfo(routingTarget, null)).value : null;
     }
 
+    public int size() {
+        if (mode == TreeType.BST)
+            return binarySearchTree.size();
+        else
+            return avl.size();
+    }
+
 }
 
