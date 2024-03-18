@@ -6,43 +6,23 @@ import java.util.List;
 import java.util.Queue;
 
 public class BinarySearchTree<T> {
-
-    /** The root node of the binary search tree. */
     private TreeNode<T> root;
-
-    /** The maximum depth of the binary search tree. */
     private int depth;
 
-    /** The total number of nodes in the binary search tree. */
-    private int size;
-
-    /**
-     * Constructs an empty binary search tree.
-     */
     public BinarySearchTree() {
         root = null;
         depth = 0;
-        size = 0;
     }
 
-    /**
-     * Adds an array of values to the binary search tree.
-     * @param values An array of values to be added to the binary search tree.
-     */
     public void add(T[] values) {
         for (T value : values)
             add(value);
     }
 
-    /**
-     * Adds a single value to the binary search tree.
-     * @param value The value to be added to the binary search tree.
-     */
     public void add(T value) {
         TreeNode<T> newNode = new TreeNode<>(value);
         if (root == null) {
             root = newNode;
-            size++;
             return;
         }
 
@@ -70,29 +50,17 @@ public class BinarySearchTree<T> {
         newNode.parent = parent;
         if (depth < step)
             depth = step;
-        size++;
     }
 
-    /**
-     * Searches for a value in the binary search tree.
-     * @param value The value to search for.
-     * @return The node containing the value if found, otherwise null.
-     */
     public TreeNode<T> search(T value) {
         return search(root, value);
     }
 
-    /**
-     * Recursive method to search for a value in the binary search tree.
-     * @param node The root node of the subtree to search.
-     * @param value The value to search for.
-     * @return The node containing the value if found, otherwise null.
-     */
-    private TreeNode<T> search(TreeNode<T> node, T value) {
-        if (node == null)
+    private TreeNode<T> search(TreeNode<T> root, T value) {
+        if (root == null)
             return null;
         Comparable<? super T> v = (Comparable<? super T>) value;
-        TreeNode<T> p = node;
+        TreeNode<T> p = root;
         while (p != null) {
             int cmp = v.compareTo(p.value);
             if (cmp < 0)
@@ -105,67 +73,55 @@ public class BinarySearchTree<T> {
         return null;
     }
 
-    /**
-     * Removes a value from the binary search tree.
-     * @param value The value to remove.
-     * @return True if the value was successfully removed, otherwise false.
-     */
+
     public Boolean remove(T value) {
-        if (remove(root, value) != null) {
-            size--;
-            return true;
+        return remove(this.root, value);
+    }
+
+    //a node's former node is the node with the largest value in the left child tree.
+    //a node's following node is the node with the smallest value in the right child tree.
+    private Boolean remove(TreeNode<T> root, T value) {
+        root = search(root, value);
+        if (root == null)
+            return false;
+        TreeNode<T> parent = this.root;
+        //if the node doesn't is a leaf
+        if (root.leftChild == null && root.rightChild == null)
+            if (parent.leftChild == root)
+                parent.leftChild = null;
+            else
+                parent.rightChild = null;
+
+        TreeNode<T> p = root;
+        //in java an object cannot be deleted directly
+        if (root.leftChild != null) {
+            p = p.leftChild;
+            while (p.rightChild != null) {
+                p = p.rightChild;
+            }
+            root.value = p.value;
+            remove(root.leftChild, p.value);
+        } else if (root.rightChild != null) {
+            //if the node doesn't have a former node
+            p = p.rightChild;
+            while (p.leftChild != null) {
+                p = p.leftChild;
+            }
+            root.value = p.value;
+            remove(root.rightChild, p.value);
         }
-        return false;
+
+        return true;
     }
 
-    /**
-     * Recursive method to remove a value from the binary search tree.
-     * @param node The root node of the subtree.
-     * @param value The value to remove.
-     * @return The root node of the updated subtree after removing the value.
-     */
-    private TreeNode<T> remove(TreeNode<T> node, T value) {
-        if (node == null)
-            return null;
-
-        Comparable<? super T> v = (Comparable<? super T>) value;
-        if (v.compareTo(node.value) < 0) {
-            node.leftChild = remove(node.leftChild, value);
-        } else if (v.compareTo(node.value) > 0) {
-            node.rightChild = remove(node.rightChild, value);
-        } else {
-            // Case 1: No child or only one child
-            if (node.leftChild == null)
-                return node.rightChild;
-            else if (node.rightChild == null)
-                return node.leftChild;
-
-            // Case 2: Node with two children
-            node.value = findMin(node.rightChild).value;
-            node.rightChild = remove(node.rightChild, node.value);
-        }
-        return node;
+    public int getDepth() {
+        return depth;
     }
 
-    /**
-     * Helper method to find the minimum value node in a subtree.
-     * @param node The root node of the subtree.
-     * @return The node with the minimum value in the subtree.
-     */
-    private TreeNode<T> findMin(TreeNode<T> node) {
-        if (node.leftChild == null)
-            return node;
-        return findMin(node.leftChild);
-    }
-
-    /**
-     * Performs a level order traversal of the binary search tree.
-     * @return A list containing the elements of the binary search tree in level order.
-     */
     public List<T> levelOrderTraverse() {
         Queue<TreeNode<T>> queue = new LinkedList<>();
         List<T> outcome = new ArrayList<>();
-        queue.offer(root);
+        queue.offer(this.root);
         while (!queue.isEmpty()) {
             TreeNode<T> head = queue.peek();
             outcome.add(queue.poll().value);
@@ -175,10 +131,6 @@ public class BinarySearchTree<T> {
                 queue.offer(head.rightChild);
         }
         return outcome;
-    }
-
-    public int size() {
-        return size;
     }
 
     @Override
