@@ -83,7 +83,7 @@ public class BinarySearchTree<T> {
         root = search(root, value);
         if (root == null)
             return false;
-        TreeNode<T> parent = root.parent;
+        TreeNode<T> parent = this.root;
         //if the node doesn't is a leaf
         if (root.leftChild == null && root.rightChild == null)
             if (parent.leftChild == root)

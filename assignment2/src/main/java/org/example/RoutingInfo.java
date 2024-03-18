@@ -15,4 +15,12 @@ public class RoutingInfo implements Comparable {
             return targetNetwork.compareTo(((RoutingInfo) o).targetNetwork);
         else throw new ClassCastException("Can only compare RoutingInfo with RoutingInfo");
     }
+
+    @Override
+    public String toString() {
+        return "RoutingInfo{" +
+                "targetNetwork='" + targetNetwork + '\'' +
+                ", nextJump='" + nextJump + '\'' +
+                '}';
+    }
 }

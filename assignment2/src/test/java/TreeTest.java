@@ -10,6 +10,7 @@ public class TreeTest {
         binarySearchTree.add(new Integer[]{1, 2, 3, 5, 6, 7});
         System.out.println(binarySearchTree);
         System.out.println("Search node 1: " + binarySearchTree.search(1));
+        System.out.println("Search node 8: " + binarySearchTree.search(8));
         if (!binarySearchTree.remove(4))
             System.out.println("4 doesn't exist");
         if (binarySearchTree.remove(3))

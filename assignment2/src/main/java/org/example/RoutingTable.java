@@ -30,9 +30,11 @@ public class RoutingTable {
 
     public RoutingInfo search(String routingTarget) {
         if (mode == TreeType.BST)
-            return binarySearchTree.search(new RoutingInfo(routingTarget, null)).value;
+            return binarySearchTree.search(new RoutingInfo(routingTarget, null)) != null ?
+                    binarySearchTree.search(new RoutingInfo(routingTarget, null)).value : null;
         else
-            return avl.search(new RoutingInfo(routingTarget, null)).value;
+            return avl.search(new RoutingInfo(routingTarget, null)) != null ?
+                    avl.search(new RoutingInfo(routingTarget, null)).value : null;
     }
 
 }
