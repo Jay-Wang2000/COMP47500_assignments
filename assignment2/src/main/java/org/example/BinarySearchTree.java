@@ -13,12 +13,16 @@ public class BinarySearchTree<T> {
     /** The maximum depth of the binary search tree. */
     private int depth;
 
+    /** The total number of nodes in the binary search tree. */
+    private int size;
+
     /**
      * Constructs an empty binary search tree.
      */
     public BinarySearchTree() {
         root = null;
         depth = 0;
+        size = 0;
     }
 
     /**
@@ -38,6 +42,7 @@ public class BinarySearchTree<T> {
         TreeNode<T> newNode = new TreeNode<>(value);
         if (root == null) {
             root = newNode;
+            size++;
             return;
         }
 
@@ -65,6 +70,7 @@ public class BinarySearchTree<T> {
         newNode.parent = parent;
         if (depth < step)
             depth = step;
+        size++;
     }
 
     /**
@@ -105,7 +111,11 @@ public class BinarySearchTree<T> {
      * @return True if the value was successfully removed, otherwise false.
      */
     public Boolean remove(T value) {
-        return remove(root, value) != null;
+        if (remove(root, value) != null) {
+            size--;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -165,6 +175,10 @@ public class BinarySearchTree<T> {
                 queue.offer(head.rightChild);
         }
         return outcome;
+    }
+
+    public int size() {
+        return size;
     }
 
     @Override

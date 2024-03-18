@@ -10,8 +10,19 @@ public class AVL<T> {
     /** The root node of the AVL tree. */
     private AvlNode<T> root;
 
+    /** The number of nodes in the AVL tree. */
+    private int size;
+
     /** The maximum allowed imbalance in the AVL tree. */
     private static final int ALLOWED_IMBALANCE = 1;
+
+    /**
+     * Constructs an empty AVL tree.
+     */
+    public AVL() {
+        root = null;
+        size = 0;
+    }
 
     /**
      * Returns the height of the given AVL node.
@@ -28,7 +39,7 @@ public class AVL<T> {
      */
     public void add(T[] values) {
         for (T value : values)
-            root = add(value, root);
+            add(value);
     }
 
     /**
@@ -36,6 +47,7 @@ public class AVL<T> {
      * @param value The value to be added to the AVL tree.
      */
     public void add(T value) {
+        size++;
         if (root == null) {
             root = new AvlNode<>(value);
             return;
@@ -173,7 +185,11 @@ public class AVL<T> {
      * @return True if the value was successfully removed, otherwise false.
      */
     public Boolean remove(T value) {
-        return remove(value, this.root) != null;
+        if (remove(value, this.root) != null) {
+            size--;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -230,5 +246,9 @@ public class AVL<T> {
                 queue.offer(head.right);
         }
         return outcome;
+    }
+
+    public int size() {
+        return size;
     }
 }
