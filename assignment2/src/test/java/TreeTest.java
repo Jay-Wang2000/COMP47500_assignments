@@ -1,15 +1,8 @@
 import org.example.AVL;
-import org.example.AVL2;
-import org.example.AvlNode2;
 import org.example.BinarySearchTree;
-import org.junit.Before;
 import org.junit.Test;
 
 public class TreeTest {
-    @Before
-    public void TreeSetting() {
-
-    }
 
     @Test
     public void BSTTest() {
@@ -28,19 +21,13 @@ public class TreeTest {
     public void AVLTest() {
         AVL<Integer> avl = new AVL<>();
         avl.add(new Integer[]{1, 2, 3, 4, 6, 5, 7});
-        System.out.println(avl);
+        System.out.println(avl.levelOrderTraverse());
+        System.out.println(avl.search(1));
+        System.out.println(avl.search(2));
+        System.out.println(avl.search(8) != null ? avl.search(8) : "8 doesn't exist");
         avl.remove(2);
         avl.remove(6);
-        System.out.println(avl);
-    }
-
-    @Test
-    public void AVL2Test() {
-        AVL2<Integer> avl2 = new AVL2<>();
-        AvlNode2<Integer> avlNode2 = avl2.insert(new Integer[]{1, 2, 3, 4, 6, 5, 7}, null);
-        System.out.println(avl2.levelOrderTraverse(avlNode2));
-        avl2.remove(2, avlNode2);
-        avl2.remove(6, avlNode2);
-        System.out.println(avl2.levelOrderTraverse(avlNode2));
+        System.out.println(!avl.remove(8) ? "8 removed" : "8 doesn't exist");
+        System.out.println(avl.levelOrderTraverse());
     }
 }
