@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Version2;
 
 public class AVLTreeNode<T> {
     T value;

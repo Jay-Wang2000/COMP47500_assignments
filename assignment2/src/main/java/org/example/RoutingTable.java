@@ -4,35 +4,38 @@ public class RoutingTable {
     BinarySearchTree<RoutingInfo> binarySearchTree;
     AVL<RoutingInfo> avl;
 
-    int mode;
+    TreeType mode;
 
-    public RoutingTable(int mode) {
+    public RoutingTable(TreeType mode) {
         this.mode = mode;
-        if (mode == 1)
+        if (mode == TreeType.AVL)
             this.avl = new AVL<>();
         else
             this.binarySearchTree = new BinarySearchTree<>();
     }
 
     public void addRoute(RoutingInfo routingInfo) {
-        if (mode == 0)
+        if (mode == TreeType.BST)
             binarySearchTree.add(routingInfo);
         else
             avl.add(routingInfo);
     }
 
     public boolean remove(RoutingInfo routingInfo) {
-        if (mode == 0)
+        if (mode == TreeType.BST)
             return binarySearchTree.remove(routingInfo);
         else
             return avl.remove(routingInfo);
     }
 
     public RoutingInfo search(String routingTarget) {
-        if (mode == 0)
-            return binarySearchTree.search(new RoutingInfo(routingTarget, null)).value;
+        if (mode == TreeType.BST)
+            return binarySearchTree.search(new RoutingInfo(routingTarget, null)) != null ?
+                    binarySearchTree.search(new RoutingInfo(routingTarget, null)).value : null;
         else
-            return avl.search(new RoutingInfo(routingTarget, null)).value;
+            return avl.search(new RoutingInfo(routingTarget, null)) != null ?
+                    avl.search(new RoutingInfo(routingTarget, null)).value : null;
     }
 
 }
+
