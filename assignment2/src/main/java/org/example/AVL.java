@@ -11,8 +11,8 @@ public class AVL<T> {
 
     private static final int ALLOWED_IMBALANCE = 1;
 
-    private int height(AvlNode<T> t) {
-        return t == null ? -1 : t.height;
+    private int height(AvlNode<T> node) {
+        return node == null ? -1 : node.height;
     }
 
     public void add(T[] values) {
@@ -25,80 +25,79 @@ public class AVL<T> {
             root = new AvlNode<>(value);
             return;
         }
-        Comparable<? super T> k = (Comparable<? super T>) value;
         add(value, this.root);
     }
 
-    private AvlNode<T> add(T x, AvlNode<T> t) {
-        if (t == null)
-            return new AvlNode<>(x, null, null);
+    private AvlNode<T> add(T value, AvlNode<T> node) {
+        if (node == null)
+            return new AvlNode<>(value, null, null);
 
-        Comparable<? super T> k = (Comparable<? super T>) x;
-        int compareResult = k.compareTo(t.value);
+        Comparable<? super T> k = (Comparable<? super T>) value;
+        int compareResult = k.compareTo(node.value);
 
         if (compareResult < 0)
-            t.left = add(x, t.left);
+            node.left = add(value, node.left);
         else if (compareResult > 0)
-            t.right = add(x, t.right);
+            node.right = add(value, node.right);
 
-        return balance(t);
+        return balance(node);
     }
 
-    private AvlNode<T> balance(AvlNode<T> t) {
-        if (t == null)
+    private AvlNode<T> balance(AvlNode<T> node) {
+        if (node == null)
             return null;
 
-        if (height(t.left) - height(t.right) > ALLOWED_IMBALANCE)
-            if (height(t.left.left) >= height(t.left.right))
-                t = rotateWithLeftChild(t);
+        if (height(node.left) - height(node.right) > ALLOWED_IMBALANCE)
+            if (height(node.left.left) >= height(node.left.right))
+                node = rotateWithLeftChild(node);
             else
-                t = doubleWithLeftChild(t);
-        else if (height(t.right) - height(t.left) > ALLOWED_IMBALANCE)
-            if (height(t.right.right) >= height(t.right.left))
-                t = rotateWithRightChild(t);
+                node = doubleWithLeftChild(node);
+        else if (height(node.right) - height(node.left) > ALLOWED_IMBALANCE)
+            if (height(node.right.right) >= height(node.right.left))
+                node = rotateWithRightChild(node);
             else
-                t = doubleWithRightChild(t);
-        t.height = Math.max(height(t.left), height(t.right)) + 1;
-        return t;
+                node = doubleWithRightChild(node);
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        return node;
     }
 
-    private AvlNode<T> rotateWithLeftChild(AvlNode<T> k2) {
-        AvlNode<T> k1 = k2.left;
-        k2.left = k1.right;
-        k1.right = k2;
-        k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
-        k1.height = Math.max(height(k1.left), k2.height) + 1;
-        return k1;
+    private AvlNode<T> rotateWithLeftChild(AvlNode<T> n2) {
+        AvlNode<T> n1 = n2.left;
+        n2.left = n1.right;
+        n1.right = n2;
+        n2.height = Math.max(height(n2.left), height(n2.right)) + 1;
+        n1.height = Math.max(height(n1.left), n2.height) + 1;
+        return n1;
     }
 
-    private AvlNode<T> doubleWithLeftChild(AvlNode<T> k3) {
-        k3.left = rotateWithRightChild(k3.left);
-        return rotateWithLeftChild(k3);
+    private AvlNode<T> doubleWithLeftChild(AvlNode<T> n3) {
+        n3.left = rotateWithRightChild(n3.left);
+        return rotateWithLeftChild(n3);
     }
 
-    private AvlNode<T> rotateWithRightChild(AvlNode<T> k1) {
-        AvlNode<T> k2 = k1.right;
-        k1.right = k2.left;
-        k2.left = k1;
-        k1.height = Math.max(height(k1.left), height(k1.right)) + 1;
-        k2.height = Math.max(height(k2.right), k1.height) + 1;
-        return k2;
+    private AvlNode<T> rotateWithRightChild(AvlNode<T> n1) {
+        AvlNode<T> n2 = n1.right;
+        n1.right = n2.left;
+        n2.left = n1;
+        n1.height = Math.max(height(n1.left), height(n1.right)) + 1;
+        n2.height = Math.max(height(n2.right), n1.height) + 1;
+        return n2;
     }
 
-    private AvlNode<T> doubleWithRightChild(AvlNode<T> k1) {
-        k1.right = rotateWithLeftChild(k1.right);
-        return rotateWithRightChild(k1);
+    private AvlNode<T> doubleWithRightChild(AvlNode<T> n1) {
+        n1.right = rotateWithLeftChild(n1.right);
+        return rotateWithRightChild(n1);
     }
 
     public AvlNode<T> search(T value) {
         return search(root, value);
     }
 
-    private AvlNode<T> search(AvlNode<T> root, T value) {
-        if (root == null)
+    private AvlNode<T> search(AvlNode<T> node, T value) {
+        if (node == null)
             return null;
         Comparable<? super T> v = (Comparable<? super T>) value;
-        AvlNode<T> p = root;
+        AvlNode<T> p = node;
         while (p != null) {
             int cmp = v.compareTo(p.value);
             if (cmp < 0)
@@ -115,30 +114,30 @@ public class AVL<T> {
         return remove(value, this.root) != null;
     }
 
-    private AvlNode<T> remove(T x, AvlNode<T> t) {
-        if (t == null)
+    private AvlNode<T> remove(T value, AvlNode<T> node) {
+        if (node == null)
             return null;
 
-        Comparable<? super T> k = (Comparable<? super T>) x;
-        int compareResult = k.compareTo(t.value);
+        Comparable<? super T> k = (Comparable<? super T>) value;
+        int compareResult = k.compareTo(node.value);
         if (compareResult < 0)
-            t.left = remove(x, t.left);
+            node.left = remove(value, node.left);
         else if (compareResult > 0)
-            t.right = remove(x, t.right);
-        else if (t.left != null && t.right != null) {
-            t.value = findMin(t.right).value;
-            t.right = remove(t.value, t.right);
+            node.right = remove(value, node.right);
+        else if (node.left != null && node.right != null) {
+            node.value = findMin(node.right).value;
+            node.right = remove(node.value, node.right);
         } else
-            t = (t.left != null) ? t.left : t.right;
-        return balance(t);
+            node = (node.left != null) ? node.left : node.right;
+        return balance(node);
     }
 
-    private AvlNode<T> findMin(AvlNode<T> t) {
-        if (t == null)
+    private AvlNode<T> findMin(AvlNode<T> node) {
+        if (node == null)
             return null;
-        else if (t.left == null)
-            return t;
-        return findMin(t.left);
+        else if (node.left == null)
+            return node;
+        return findMin(node.left);
     }
 
     public List<T> levelOrderTraverse() {
