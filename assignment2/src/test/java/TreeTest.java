@@ -16,6 +16,7 @@ public class TreeTest {
         if (binarySearchTree.remove(3))
             System.out.println("remove successfully");
         System.out.println(binarySearchTree);
+        System.out.println("Search node 1: " + binarySearchTree.search(1));
     }
 
     @Test

@@ -75,42 +75,38 @@ public class BinarySearchTree<T> {
 
 
     public Boolean remove(T value) {
-        return remove(this.root, value);
+        return remove(this.root, value) != null;
     }
     //a node's former node is the node with the largest value in the left child tree.
     //a node's following node is the node with the smallest value in the right child tree.
-    private Boolean remove(TreeNode<T> root, T value) {
-        root = search(root, value);
+    private TreeNode<T> remove(TreeNode<T> root, T value) {
         if (root == null)
-            return false;
-        TreeNode<T> parent = this.root;
-        //if the node doesn't is a leaf
-        if (root.leftChild == null && root.rightChild == null)
-            if (parent.leftChild == root)
-                parent.leftChild = null;
-            else
-                parent.rightChild = null;
+            return null;
 
-        TreeNode<T> p = root;
-        //in java an object cannot be deleted directly
-        if (root.leftChild != null) {
-            p = p.leftChild;
-            while (p.rightChild != null) {
-                p = p.rightChild;
-            }
-            root.value = p.value;
-            remove(root.leftChild, p.value);
-        } else if (root.rightChild != null) {
-            //if the node doesn't have a former node
-            p = p.rightChild;
-            while (p.leftChild != null) {
-                p = p.leftChild;
-            }
-            root.value = p.value;
-            remove(root.rightChild, p.value);
+        Comparable<? super T> v = (Comparable<? super T>) value;
+        if (v.compareTo(root.value) < 0) {
+            root.leftChild = remove(root.leftChild, value);
+        } else if (v.compareTo(root.value) > 0) {
+            root.rightChild = remove(root.rightChild, value);
+        } else {
+            // Case 1: No child or only one child
+            if (root.leftChild == null)
+                return root.rightChild;
+            else if (root.rightChild == null)
+                return root.leftChild;
+
+            // Case 2: Node with two children
+            root.value = findMin(root.rightChild).value;
+            root.rightChild = remove(root.rightChild, root.value);
         }
+        return root;
+    }
 
-        return true;
+    // Helper method to find the minimum value node in a subtree
+    private TreeNode<T> findMin(TreeNode<T> node) {
+        if (node.leftChild == null)
+            return node;
+        return findMin(node.leftChild);
     }
 
     public int getDepth() {
