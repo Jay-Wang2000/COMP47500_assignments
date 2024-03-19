@@ -22,6 +22,8 @@ public class AvlNode<T> {
     public String toString() {
         return "AvlNode{" +
                 "value=" + value +
+                ", left=" + left +
+                ", right=" + right +
                 '}';
     }
 }
